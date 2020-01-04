@@ -1,0 +1,58 @@
+version: '3.2'
+
+services:
+  rabbitmq-server:
+        image: rabbitmq
+        hostname: "rabbitmq-server"
+        environment:
+            RABBITMQ_ERLANG_COOKIE: "SWQOKODSQALRPCLNMEQG"
+            RABBITMQ_DEFAULT_USER: "guest"
+            RABBITMQ_DEFAULT_PASS: "guest"
+            RABBITMQ_DEFAULT_VHOST: "/"
+        ports:
+            - "15672:15672"
+            - "5672:5672"
+        labels:
+            NAME: "rabbitmq-server"
+  server:
+      build:
+        context: ./server
+        dockerfile: Dockerfile_server
+      command: python3 -u server.py
+      container_name: server_pika
+      depends_on:
+            - rabbitmq-server
+        # Keep it running.  
+      tty: true
+      ports:
+        - 50051:50051
+      volumes:
+        - .:/usr/src/app/server
+  client1:
+      build:
+        context: ./client
+        dockerfile: Dockerfile_client
+      command: python3 -u client.py 50050
+      container_name: client_pika
+      depends_on:
+            - rabbitmq-server
+        # Keep it running.  
+      tty: true
+      ports:
+        - 50050:50050
+      volumes:
+        - .:/usr/src/app/cliente
+  client2:
+      build:
+        context: ./client
+        dockerfile: Dockerfile_client
+      command: python3 -u client.py 50049
+      container_name: client2_pika
+      depends_on:
+            - rabbitmq-server
+        # Keep it running.  
+      tty: true
+      ports:
+        - 50049:50049
+      volumes:
+        - .:/usr/src/app

@@ -1,0 +1,27 @@
+# FROM ubuntu:latest
+# # Use an official Python runtime as a parent image
+FROM python:3.7-slim
+#this is the base image, on top of which the following command will be applied
+
+# descomentar para primer uso:
+# RUN  apt-get update \
+#     &&apt-get -y install python3\
+#     &&apt-get -y install vim\
+#     &&apt-get install -y python-pip
+# Set the working directory to /app
+WORKDIR /app
+COPY . /app
+
+# RUN apt-get install python-pip
+RUN pip install --upgrade pip
+
+# Install any needed packages specified in requirements.txt
+RUN pip install --trusted-host pypi.python.org -r requirements.txt
+# RUN pip install --upgrade pip
+# RUN python-pip install grpcio
+
+EXPOSE 50051
+
+# Run server.py when the container launches
+# RUN python3 -u /app/server/server.py
+# CMD ["python3", "-u", "server.py"]

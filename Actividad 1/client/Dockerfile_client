@@ -1,0 +1,35 @@
+# FROM ubuntu:latest
+
+# # Use an official Python runtime as a parent image
+FROM python:3.7-slim
+
+#mantenerdor Mantainer fue deprecado
+LABEL Gabriel Astorga “gabriel.astorga@sansano.usm.cl”
+
+# descomentar para primer uso:
+# RUN  apt-get update \
+#     && apt-get -y install python3\
+#     && apt-get -y install vim\
+#     && apt-get install -y python-pip
+# Set the working directory to /app
+WORKDIR /app
+
+# Copy the current directory contents into the container at /app
+COPY . /app
+
+# Install any needed packages specified in requirements.txt
+RUN pip install --trusted-host pypi.python.org -r requirements.txt
+# RUN python-pip install grpcio
+
+# Make port available to the world outside this container
+EXPOSE 50050
+EXPOSE 50049
+
+# Define environment variable
+ENV NAME client
+
+ARG id_client
+RUN echo $PWD
+RUN echo "Oh dang look at that ${id_client}"
+# Run client.py when the container launches
+# CMD ["python3", "-u", "client.py", "${id_client}"]

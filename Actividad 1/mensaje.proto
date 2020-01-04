@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+message Message_request {
+    int32 id = 1;
+    string msg = 2;
+    string time = 3;
+    int32 id_dest = 4;
+}
+message Message_reply{
+    int32 id = 1;
+    string msg = 2;
+    string time = 3;
+}
+message Client {
+    int32 id = 1;
+}
+message Null {}
+
+service Sender {
+    rpc send_message(Message_request) returns (Message_reply) {}
+
+    rpc recept_message(Message_request) returns (Message_reply) {}
+}
+
+service Clients_list {
+    rpc clients_list(Client) returns (stream Client) {}    
+}
+service Client_messages {
+    rpc client_message(Client) returns (stream Message_reply) {}    
+}
