@@ -17,10 +17,14 @@ services:
         dockerfile: Dockerfile_client
         args:
           id_client: 50050
-      command: python3 -u client.py 50050 172.16.238.6
+      command: python3 -u client.py 50050
+      depends_on: 
+        [server]
       container_name: client
       ports:
         - 50050:50050
+      tty: true
+      stdin_open: true
       volumes:
         - .:/usr/src/app/cliente
   client2:
@@ -29,9 +33,13 @@ services:
         dockerfile: Dockerfile_client
         args:
           id_client: 50049
-      command: python3 -u client.py 50049 172.16.238.5
+      tty: true
+      stdin_open: true
+      command: python3 -u client.py 50049
+      depends_on: 
+        [server]
       container_name: client2
       ports:
         - 50049:50049
       volumes:
-        - .:/usr/src/app
+        - .:/usr/src/app/client2
